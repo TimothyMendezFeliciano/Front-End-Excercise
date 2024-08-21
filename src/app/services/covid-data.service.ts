@@ -1,7 +1,5 @@
-import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {SortDirection} from "@angular/material/sort";
 
 export interface CasesByDate {
   date: string;
@@ -12,9 +10,13 @@ export interface CasesByDate {
 @Injectable({
   providedIn: 'root'
 })
-export class CovidDataService {
 
-  private apiUrl = "http://localhost:4200/cases/covid-19/grouped-by-earliest-positive-diagnostic-date";
+enum ENDPOINTS {
+  base = 'http://localhost:4200',
+  cases = "/cases/covid-19/grouped-by-earliest-positive-diagnostic-date"
+}
+
+export class CovidDataService {
 
   constructor(private http: HttpClient) {
   }
@@ -22,6 +24,6 @@ export class CovidDataService {
   getCovidCasesByEarliestPositiveDiagnosticDate(startDate: string, endDate: string): Observable<CasesByDate[]> {
     let params = new HttpParams().set("startDate", startDate).set("endDate", endDate);
 
-    return this.http.get<CasesByDate[]>(this.apiUrl, {params});
+    return this.http.get<CasesByDate[]>(ENDPOINTS.base + ENDPOINTS.cases, {params});
   }
 }
